@@ -1,9 +1,11 @@
-import { useState } from "react";
 import SidebarButton from "../SidebarButton";
 
-function Sidebar() {
-  const [selectedButton, setSelectedButton] = useState("");
+interface Props {
+  selectedButton: string;
+  setSelectedButton: (button: string) => void;
+}
 
+function Sidebar({ selectedButton, setSelectedButton }: Props) {
   const handleClick = (button: string) => () => {
     if (selectedButton !== button) setSelectedButton(button);
   };
