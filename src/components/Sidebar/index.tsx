@@ -27,6 +27,7 @@ function Sidebar({ selectedButton, setSelectedButton }: Props) {
         <SidebarButton
           isActive={selectedButton === button}
           onClick={handleClick(button)}
+          key={button}
         >
           {buttons[button]}
         </SidebarButton>
