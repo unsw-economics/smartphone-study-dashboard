@@ -21,7 +21,7 @@ function Sidebar({ selectedButton, setSelectedButton }: Props) {
   };
 
   return (
-    <div className="outline-1 border-solid border-2 rounded-xl border-gray-300 w-1/4 px-2 mr-4 flex flex-col">
+    <div className="outline-1 border-solid border-2 rounded-xl border-gray-300 w-1/6 px-2 mr-4 flex flex-col">
       <div className="text-xl text-center my-2">Options</div>
       {Object.keys(buttons).map((button) => (
         <SidebarButton

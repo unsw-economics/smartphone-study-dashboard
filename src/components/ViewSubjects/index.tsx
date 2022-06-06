@@ -95,18 +95,22 @@ function ViewSubjects() {
           />
         </div>
       </div>
+      <div>Finished survey: {filteredSubjects.length}</div>
+      <div>
+        Installed app: {filteredSubjects.filter((s) => s.identified).length}
+      </div>
       <div className="overflow-y-scroll h-5/6 my-8">
         <table className="table-auto">
           <thead>
             <tr>
-              <th className="px-3 py-2">ID</th>
-              <th className="px-3 py-2">Subject ID</th>
-              <th className="px-3 py-2">Email</th>
-              <th className="px-3 py-2">Identified</th>
-              <th className="px-3 py-2">Test group</th>
-              <th className="px-3 py-2">Treatment intensity</th>
-              <th className="px-3 py-2">Treatment limit</th>
-              <th className="px-3 py-2">Study group</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">ID</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Subject ID</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Email</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Identified</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Test group</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Intensity</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Limit</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Group</th>
             </tr>
           </thead>
           <tbody>
@@ -116,7 +120,11 @@ function ViewSubjects() {
                 <td className="border px-3 py-2">{subject.subject_id}</td>
                 <td className="border px-3 py-2">{subject.email}</td>
                 <td className="border px-3 py-2">
-                  {subject.identified ? "True" : "False"}
+                  {subject.identified ? (
+                    <span className="text-green-500">True</span>
+                  ) : (
+                    <span className="text-red-500">False</span>
+                  )}
                 </td>
                 <td className="border px-3 py-2">{subject.test_group}</td>
                 <td className="border px-3 py-2">
