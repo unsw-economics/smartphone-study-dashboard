@@ -18,6 +18,7 @@ interface Subject {
   treatment_intensity: number;
   treatment_limit: number;
   study_group: string;
+  date_inserted: string;
 }
 
 function ViewSubjects() {
@@ -111,6 +112,7 @@ function ViewSubjects() {
               <th className="px-3 py-2 sticky top-0 bg-white">Intensity</th>
               <th className="px-3 py-2 sticky top-0 bg-white">Limit</th>
               <th className="px-3 py-2 sticky top-0 bg-white">Group</th>
+              <th className="px-3 py-2 sticky top-0 bg-white">Join date</th>
             </tr>
           </thead>
           <tbody>
@@ -132,6 +134,12 @@ function ViewSubjects() {
                 </td>
                 <td className="border px-3 py-2">{subject.treatment_limit}</td>
                 <td className="border px-3 py-2">{subject.study_group}</td>
+                <td className="border px-3 py-2">
+                  {subject.date_inserted
+                    .replace("T", " ")
+                    .slice(0, 16)
+                    .replace(/-/g, "/")}
+                </td>
               </tr>
             ))}
           </tbody>
