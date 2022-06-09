@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TailwindDropdown from "../TailwindDropdown";
 import { getSubjects } from "../../api";
-import { arrayOfObjectsToCSV, downloadCSV } from "../../util";
+import DownloadButton from "../../DownloadButton";
 
 interface StudyDate {
   period_name: string;
@@ -70,22 +70,13 @@ function ViewSubjects() {
     );
   }
 
-  function handleDownload() {
-    downloadCSV(
-      arrayOfObjectsToCSV(filteredSubjects),
-      `Subjects_${selectedGroup}_${new Date().toLocaleDateString()}.csv`
-    );
-  }
-
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
-        <button
-          className="bg-green-500 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-green-600"
-          onClick={() => handleDownload()}
-        >
-          Download as CSV
-        </button>
+        <DownloadButton
+          objects={filteredSubjects}
+          filename={`Subjects_${selectedGroup}_${new Date().toLocaleDateString()}`}
+        />
         <div className="flex gap-2">
           <div className="self-center text-md">Select study group:</div>
           <TailwindDropdown

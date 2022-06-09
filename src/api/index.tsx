@@ -30,3 +30,18 @@ export async function getDates() {
 
   return json.data;
 }
+
+export async function getBackupUsage() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${apiUrl}/get-all-usage`, {
+    headers: {
+      authorization: `${token}`,
+    },
+    method: "GET",
+  });
+
+  const json = await response.json();
+
+  return json.data;
+}

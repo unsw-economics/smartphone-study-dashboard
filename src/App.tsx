@@ -6,6 +6,7 @@ import NoContent from "./components/NoContent";
 import ViewSubjects from "./components/ViewSubjects";
 import NotCompleted from "./components/NotCompleted";
 import TreatmentInfo from "./components/TreatmentInfo";
+import BackupUsage from "./BackupUsage";
 
 function App() {
   const [selectedButton, setSelectedButton] = useState("");
@@ -37,7 +38,7 @@ function App() {
       content = <NotCompleted />;
       break;
     case "usageReportsBackup":
-      content = <NotCompleted />;
+      content = <BackupUsage />;
       break;
     case "genWeekly":
       content = <NotCompleted />;
