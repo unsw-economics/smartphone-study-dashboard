@@ -21,9 +21,16 @@ function MainUsage() {
         and investigations.
       </p>
       <p className="my-2">
-        File is too big to display. Please download it below
+        File is too big to display. Please download it below when it loads.
       </p>
-      <DownloadButton objects={usage} filename="usage_reports" />
+      {usage.length === 0 ? (
+        <div className="text-sm font-semibold">Downloading data...</div>
+      ) : (
+        <DownloadButton
+          objects={usage}
+          filename={`usage_report_(old)_at_${new Date().toLocaleDateString()}`}
+        />
+      )}
     </div>
   );
 }
