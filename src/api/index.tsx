@@ -15,3 +15,18 @@ export async function getSubjects() {
 
   return json.data;
 }
+
+export async function getDates() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${apiUrl}/get-all-dates`, {
+    headers: {
+      authorization: `${token}`,
+    },
+    method: "GET",
+  });
+
+  const json = await response.json();
+
+  return json.data;
+}

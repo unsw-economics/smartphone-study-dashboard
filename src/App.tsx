@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NoContent from "./components/NoContent";
 import ViewSubjects from "./components/ViewSubjects";
 import NotCompleted from "./components/NotCompleted";
+import TreatmentInfo from "./components/TreatmentInfo";
 
 function App() {
   const [selectedButton, setSelectedButton] = useState("");
@@ -30,7 +31,7 @@ function App() {
       content = <ViewSubjects />;
       break;
     case "treatmentDates":
-      content = <NotCompleted />;
+      content = <TreatmentInfo />;
       break;
     case "usageReportsMain":
       content = <NotCompleted />;
