@@ -14,8 +14,8 @@ function Sidebar({ selectedButton, setSelectedButton }: Props) {
   const buttons: { [key in string]: string } = {
     subjects: "View test subjects",
     treatmentDates: "View treatment dates",
-    usageReportsMain: "View usage reports ",
-    usageReportsBackup: "View backup usage reports",
+    usageReportsBackup: "View usage reports",
+    usageReportsMain: "View usage reports (old)",
     genWeekly: "Generate weekly reports",
     genUsage: "Generate usage summary",
   };

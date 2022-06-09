@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getBackupUsage } from "../api";
+import { getBackupUsage } from "../../api";
 import DownloadButton from "../DownloadButton";
 
 interface BackupUsageInfo {
@@ -7,6 +7,8 @@ interface BackupUsageInfo {
   study_group: string;
   date_reported: string;
   usage: number;
+  period: string;
+  day: number;
 }
 
 function BackupUsage() {
@@ -21,7 +23,7 @@ function BackupUsage() {
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl text-bold font-bold mb-2">Backup Usage</h1>
+      <h1 className="text-2xl text-bold font-bold mb-2">Usage Reports</h1>
       <DownloadButton objects={usage} filename="BackupUsage" />
       <div className="overflow-y-scroll h-5/6 my-8">
         <table className="table-auto">
@@ -31,20 +33,24 @@ function BackupUsage() {
               <th className="border px-4 py-2">Study Group</th>
               <th className="border px-4 py-2">Date Reported</th>
               <th className="border px-4 py-2">Usage</th>
+              <th className="border px-4 py-2">Period</th>
+              <th className="border px-4 py-2">Day</th>
             </tr>
           </thead>
-          {usage.map((usage) => (
-            <tbody>
-              <tr>
+          <tbody>
+            {usage.map((usage) => (
+              <tr key={`${usage.subject_id} ${usage.date_reported}`}>
                 <td className="border px-4 py-2">{usage.subject_id}</td>
                 <td className="border px-4 py-2">{usage.study_group}</td>
                 <td className="border px-4 py-2">
                   {usage.date_reported.slice(0, 10)}
                 </td>
                 <td className="border px-4 py-2">{usage.usage}</td>
+                <td className="border px-4 py-2">{usage.period}</td>
+                <td className="border px-4 py-2">{usage.day}</td>
               </tr>
-            </tbody>
-          ))}
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

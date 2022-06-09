@@ -1,4 +1,4 @@
-import { arrayOfObjectsToCSV, downloadCSV } from "../util";
+import { arrayOfObjectsToCSV, downloadCSV } from "../../util";
 
 interface Props {
   objects: any[];

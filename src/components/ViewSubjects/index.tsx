@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TailwindDropdown from "../TailwindDropdown";
 import { getSubjects } from "../../api";
-import DownloadButton from "../../DownloadButton";
+import DownloadButton from "../DownloadButton";
 
 interface StudyDate {
   period_name: string;
