@@ -4,10 +4,10 @@ import SideBar from "./components/Sidebar";
 import { useEffect, useState } from "react";
 import NoContent from "./components/NoContent";
 import ViewSubjects from "./components/ViewSubjects";
-import NotCompleted from "./components/NotCompleted";
 import TreatmentInfo from "./components/TreatmentInfo";
 import BackupUsage from "./components/BackupUsage";
 import MainUsage from "./components/MainUsage";
+import UsageSummary from "./components/Summary";
 
 function App() {
   const [selectedButton, setSelectedButton] = useState("");
@@ -41,11 +41,8 @@ function App() {
     case "usageReportsBackup":
       content = <BackupUsage />;
       break;
-    case "genWeekly":
-      content = <NotCompleted />;
-      break;
     case "genUsage":
-      content = <NotCompleted />;
+      content = <UsageSummary />;
       break;
     default:
       content = <NoContent />;

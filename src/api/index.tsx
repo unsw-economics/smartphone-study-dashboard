@@ -60,3 +60,18 @@ export async function getMainUsage() {
 
   return json.data;
 }
+
+export async function getUsageSummary() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${apiUrl}/get-usage-summary`, {
+    headers: {
+      authorization: `${token}`,
+    },
+    method: "GET",
+  });
+
+  const json = await response.json();
+
+  return json.data;
+}

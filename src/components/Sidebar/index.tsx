@@ -16,7 +16,6 @@ function Sidebar({ selectedButton, setSelectedButton }: Props) {
     treatmentDates: "View treatment dates",
     usageReportsBackup: "View usage reports",
     usageReportsMain: "View usage reports (old)",
-    genWeekly: "Generate weekly reports",
     genUsage: "Generate usage summary",
   };
 
