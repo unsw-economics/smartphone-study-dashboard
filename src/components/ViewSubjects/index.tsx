@@ -1,85 +1,55 @@
 import { useEffect, useState } from "react";
-import TailwindDropdown from "../TailwindDropdown";
-import { getSubjects } from "../../api";
+import { getDates, getSubjects } from "../../api";
 import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 import { Subject } from "../../ts/interfaces/api_interfaces";
-
-interface StudyDate {
-  period_name: string;
-  is_default: boolean;
-}
+import TailwindDropdown from "../TailwindDropdown";
 
 function ViewSubjects() {
-  const [studyDates, setStudyDates] = useState<StudyDate[]>([]);
+  const [groups, setGroups] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<string>("Loading...");
 
+  // Triggers on page load
   useEffect(() => {
     (async () => {
-      const _subjects = await getSubjects();
-      setSubjects(_subjects);
-
-      // Get a list of study dates from the subjects array
-      var studydates: StudyDate[] = [];
-      new Set(
-        _subjects.map((subject: { study_group: string }) => subject.study_group)
-      ).forEach((studyGroup) => {
-        studydates.push({
-          period_name: studyGroup as string,
-          is_default: studyGroup === "22T2",
-        });
-      });
-
-      setStudyDates(studydates);
-
-      // Filter subjects by study date
-      var _filteredSubjects: Subject[] = _subjects.filter(
-        (subject: { study_group: string }) => subject.study_group === "22T2"
-      );
-      _filteredSubjects = _filteredSubjects.sort(
-        (a: { id: number }, b: { id: number }) => a.id - b.id
-      );
-      setFilteredSubjects(_filteredSubjects);
-
-      // Set default study date
-      setSelectedGroup("22T2");
+      // Retrieve possible study dates from the backend
+      const dates = await getDates();
+      setSelected(dates.filter((d) => d.is_default)[0].period_name);
+      setGroups(dates.map((d) => d.period_name));
     })();
   }, []);
 
-  function handleClick(studyGroup: string) {
-    setFilteredSubjects(
-      subjects
-        .filter(
-          (subject: { study_group: string }) =>
-            subject.study_group === studyGroup
-        )
-        .sort((a: { id: number }, b: { id: number }) => a.id - b.id)
-    );
-  }
+  // Triggers whenever the selected group changes
+  useEffect(() => {
+    (async () => {
+      // Retrieve the list of subjects from the backend using the selected study date
+      if (selected) {
+        setSubjects(await getSubjects(selected));
+      }
+    })();
+  }, [selected]);
 
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
         <DownloadButton
-          objects={filteredSubjects}
-          filename={`Subjects_${selectedGroup}_${new Date().toLocaleDateString()}`}
+          objects={subjects}
+          filename={`Subjects_${selected}_${new Date().toLocaleDateString()}`}
         />
         <div className="flex gap-2">
           <div className="self-center text-md">Select study group:</div>
           <TailwindDropdown
-            options={studyDates.map((studyDate) => studyDate.period_name)}
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
-            onClick={handleClick}
+            options={groups}
+            selected={selected || "Loading..."}
+            setSelected={setSelected}
           />
         </div>
       </div>
-      <div>Finished survey: {filteredSubjects.length}</div>
+      <div>Finished survey: {subjects.length}</div>
       <div>
-        Installed app:{" "}
-        {filteredSubjects.filter((s) => s.identified === "True").length}
+        Installed app:
+        {subjects.filter((s) => s.identified === "True").length}
       </div>
       <div className="overflow-y-scroll h-5/6 my-8">
         <Table
@@ -87,7 +57,7 @@ function ViewSubjects() {
             "ID",
             "Subject ID",
             "Email",
-            "Identified",
+            "Signed In",
             "Test group",
             "Intensity",
             "Limit",
@@ -95,7 +65,7 @@ function ViewSubjects() {
             "Join date",
             "Last activity",
           ]}
-          data={filteredSubjects}
+          data={subjects}
         />
       </div>
     </div>

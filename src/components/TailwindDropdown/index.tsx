@@ -4,7 +4,6 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import React from "react";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -12,22 +11,16 @@ function classNames(...classes: string[]) {
 
 interface Props {
   options: string[];
-  selectedGroup: string;
-  setSelectedGroup: (group: string) => void;
-  onClick: (option: string) => void;
+  selected: string;
+  setSelected: (group: string) => void;
 }
 
-function TailwindDropdown({
-  options,
-  selectedGroup,
-  setSelectedGroup,
-  onClick,
-}: Props) {
+function TailwindDropdown({ options, selected, setSelected }: Props) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-          {selectedGroup}
+          {selected}
           <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -50,12 +43,9 @@ function TailwindDropdown({
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block px-4 py-2 text-sm w-full text-left",
-                      selectedGroup === option ? "font-semibold" : ""
+                      selected === option ? "font-semibold" : ""
                     )}
-                    onClick={() => {
-                      setSelectedGroup(option);
-                      onClick(option);
-                    }}
+                    onClick={() => setSelected(option)}
                   >
                     {option}
                   </button>

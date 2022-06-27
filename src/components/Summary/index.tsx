@@ -1,70 +1,48 @@
 import { useEffect, useState } from "react";
-import { getUsageSummary } from "../../api";
+import { getDates, getUsageSummary } from "../../api";
 import { UsageSummary } from "../../ts/interfaces/api_interfaces";
-import { SimpleStudyDate } from "../../ts/interfaces/app_interfaces";
 import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 import TailwindDropdown from "../TailwindDropdown";
 
 function Summary() {
-  const [studyDates, setStudyDates] = useState<SimpleStudyDate[]>([]);
   const [usageSummary, setUsageSummary] = useState<UsageSummary[]>([]);
-  const [filteredSummary, setFilteredSummary] = useState<UsageSummary[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<string>("Loading...");
+  const [groups, setGroups] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
 
+  // Triggers on page load
   useEffect(() => {
     (async () => {
-      const _usageSummary = await getUsageSummary();
-      setUsageSummary(_usageSummary);
-
-      // Get a list of study dates from the usage array
-      var studydates: SimpleStudyDate[] = [];
-      new Set(
-        _usageSummary.map(
-          (subject: { study_group: string }) => subject.study_group
-        )
-      ).forEach((studyGroup) => {
-        studydates.push({
-          period_name: studyGroup as string,
-          is_default: studyGroup === "22T2",
-        });
-      });
-
-      setStudyDates(studydates);
-
-      // Filter subjects by study date
-      var _filteredSummary: UsageSummary[] = _usageSummary.filter(
-        (subject: { study_group: string }) => subject.study_group === "22T2"
-      );
-      setFilteredSummary(_filteredSummary);
-
-      // Set default study date
-      setSelectedGroup("22T2");
+      // Retrieve possible study dates from the backend
+      const dates = await getDates();
+      setSelected(dates.filter((d) => d.is_default)[0].period_name);
+      setGroups(dates.map((d) => d.period_name));
     })();
   }, []);
 
-  function handleClick(studyGroup: string) {
-    setFilteredSummary(
-      usageSummary.filter(
-        (subject: { study_group: string }) => subject.study_group === studyGroup
-      )
-    );
-  }
+  // Triggers whenever the selected group changes
+  useEffect(() => {
+    (async () => {
+      // Retrieve the usage report from the backend using the selected study date
+      if (selected) {
+        setUsageSummary(await getUsageSummary(selected));
+      }
+    })();
+  }, [selected]);
 
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
         <DownloadButton
-          objects={filteredSummary}
-          filename={`Summary_${selectedGroup}_${new Date().toLocaleDateString()}`}
+          objects={usageSummary}
+          filename={`Summary_${selected}_${new Date().toLocaleDateString()}`}
         />
         <div className="flex gap-2">
           <div className="self-center text-md">Select study group:</div>
           <TailwindDropdown
-            options={studyDates.map((studyDate) => studyDate.period_name)}
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
-            onClick={handleClick}
+            options={groups}
+            selected={selected || "Loading..."}
+            setSelected={setSelected}
           />
         </div>
       </div>
@@ -86,7 +64,7 @@ function Summary() {
             "Latest sign in",
             "Study Group",
           ]}
-          data={filteredSummary}
+          data={usageSummary}
         />
       </div>
     </div>

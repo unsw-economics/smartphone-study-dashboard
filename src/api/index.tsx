@@ -27,7 +27,7 @@ async function get(resource: string, params?: StrDict): Promise<Object> {
   var queryParams = "";
   if (params) {
     queryParams += "?";
-    queryParams = Object.keys(params)
+    queryParams += Object.keys(params)
       .map((key) => `${key}=${params[key]}`)
       .join("&");
   }
@@ -46,8 +46,14 @@ async function get(resource: string, params?: StrDict): Promise<Object> {
  * Retrieves a list of subjects from the backend.
  * @returns A list of all subjects in the database.
  */
-export async function getSubjects(): Promise<Subject[]> {
-  const subjects = (await get(`get-all-subjects`)) as Subject[];
+export async function getSubjects(group?: string): Promise<Subject[]> {
+  var subjects;
+  if (group) {
+    subjects = (await get("get-all-subjects", { group })) as Subject[];
+  } else {
+    subjects = (await get("get-all-subjects")) as Subject[];
+  }
+
   const datetimeRegex = /(\d+)-(\d+)-(\d+)T(\d+):(\d+).*/;
 
   // Alter properties of subjects to be more readable
@@ -100,8 +106,14 @@ export async function getMainUsage() {
  * Retrieves a summary/report of the usage data.
  * @returns A report as a list of objects.
  */
-export async function getUsageSummary(): Promise<UsageSummary[]> {
-  const summary = (await get(`get-usage-summary`)) as UsageSummary[];
+export async function getUsageSummary(group?: string): Promise<UsageSummary[]> {
+  var summary;
+  if (group) {
+    summary = (await get("get-usage-summary", { group })) as UsageSummary[];
+  } else {
+    summary = (await get("get-usage-summary")) as UsageSummary[];
+  }
+
   summary.forEach((s: UsageSummary) => {
     s.latest_sign_in = s.latest_sign_in.replace(
       /(\d+)-(\d+)-(\d+)T(\d+):(\d+).*/,
