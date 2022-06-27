@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import { getBackupUsage } from "../../api";
+import { BackupUsageInfo } from "../../ts/interfaces/api_interfaces";
 import DownloadButton from "../DownloadButton";
-
-interface BackupUsageInfo {
-  subject_id: string;
-  study_group: string;
-  date_reported: string;
-  usage: number;
-  period: string;
-  day: number;
-}
 
 function BackupUsage() {
   const [usage, setUsage] = useState<BackupUsageInfo[]>([]);

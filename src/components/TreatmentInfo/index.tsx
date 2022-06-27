@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import { getDates } from "../../api";
-
-interface StudyDate {
-  period_name: string;
-  baseline_date: string;
-  treatment_date: string;
-  endline_date: string;
-  over_date: string;
-  is_default: Boolean;
-}
+import { StudyDate } from "../../ts/interfaces/api_interfaces";
 
 function TreatmentInfo() {
   const [dates, setDates] = useState<StudyDate[]>([]);

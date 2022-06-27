@@ -1,27 +1,12 @@
 import { useEffect, useState } from "react";
 import { getUsageSummary } from "../../api";
+import { UsageSummary } from "../../ts/interfaces/api_interfaces";
+import { SimpleStudyDate } from "../../ts/interfaces/app_interfaces";
 import DownloadButton from "../DownloadButton";
 import TailwindDropdown from "../TailwindDropdown";
 
-interface StudyDate {
-  period_name: string;
-  is_default: boolean;
-}
-
-interface UsageSummary {
-  subject_id: string;
-  test_group: number;
-  avg_treatment_usage: number;
-  treatment_report_days: number;
-  days_under_limit: number;
-  avg_baseline_usage: number;
-  baseline_report_days: number;
-  latest_sign_in: string;
-  study_group: string;
-}
-
 function Summary() {
-  const [studyDates, setStudyDates] = useState<StudyDate[]>([]);
+  const [studyDates, setStudyDates] = useState<SimpleStudyDate[]>([]);
   const [usageSummary, setUsageSummary] = useState<UsageSummary[]>([]);
   const [filteredSummary, setFilteredSummary] = useState<UsageSummary[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>("Loading...");
@@ -32,7 +17,7 @@ function Summary() {
       setUsageSummary(_usageSummary);
 
       // Get a list of study dates from the usage array
-      var studydates: StudyDate[] = [];
+      var studydates: SimpleStudyDate[] = [];
       new Set(
         _usageSummary.map(
           (subject: { study_group: string }) => subject.study_group

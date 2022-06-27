@@ -1,77 +1,95 @@
 // const apiUrl = "https://zhang-smartphone-web.onrender.com/api";
+
+import {
+  Subject,
+  StudyDate,
+  UsageSummary,
+  BackupUsageInfo,
+} from "../ts/interfaces/api_interfaces";
+import { StrDict } from "../ts/types/app_types";
+
 // const apiUrl = "http://localhost:3000/api";
 const apiUrl = "https://zhang-smartphone-web-production.onrender.com/api";
-export async function getSubjects() {
-  const token = localStorage.getItem("token");
 
-  const response = await fetch(`${apiUrl}/get-all-subjects`, {
-    headers: {
-      authorization: `${token}`,
-    },
+/**
+ * A helper function which wraps around the fetch API to make a GET request.
+ * @param resource The resource to fetch from the backend.
+ * @param params The query parameters to send with the request.
+ * @returns A json object containing the response from the backend.
+ */
+async function get(resource: string, params?: StrDict): Promise<Object> {
+  const token = localStorage.getItem("token");
+  const headers = {
+    authorization: `${token}`,
+  };
+
+  var queryParams = "";
+  if (params) {
+    queryParams += "?";
+    queryParams = Object.keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join("&");
+  }
+
+  const response = await fetch(`${apiUrl}/${resource}${queryParams}`, {
+    headers,
     method: "GET",
   });
-
   const json = await response.json();
-
   return json.data;
 }
 
-export async function getDates() {
-  const token = localStorage.getItem("token");
-
-  const response = await fetch(`${apiUrl}/get-all-dates`, {
-    headers: {
-      authorization: `${token}`,
-    },
-    method: "GET",
+/**
+ * Retrieves a list of subjects from the backend.
+ * @returns A list of all subjects in the database.
+ */
+export async function getSubjects(): Promise<Subject[]> {
+  const subjects = (await get(`get-all-subjects`)) as Subject[];
+  const datetimeRegex = /(\d+)-(\d+)-(\d+)T(\d+):(\d+).*/;
+  subjects.forEach((subject: Subject) => {
+    subject.identified = subject.identified ? "True" : "False";
+    subject.date_inserted = subject.date_inserted.replace(
+      datetimeRegex,
+      "$4:$5 $1/$2/$3"
+    );
+    if (subject.last_activity) {
+      subject.last_activity = subject.last_activity.replace(
+        datetimeRegex,
+        "$4:$5 $1/$2/$3"
+      );
+    }
   });
-
-  const json = await response.json();
-
-  return json.data;
+  return subjects;
 }
 
-export async function getBackupUsage() {
-  const token = localStorage.getItem("token");
-
-  const response = await fetch(`${apiUrl}/get-all-usage`, {
-    headers: {
-      authorization: `${token}`,
-    },
-    method: "GET",
-  });
-
-  const json = await response.json();
-
-  return json.data;
+/**
+ * Retrieves a list of study dates from the backend.
+ * @returns A list of all study dates in the database.
+ */
+export async function getDates(): Promise<StudyDate[]> {
+  return (await get(`get-all-dates`)) as StudyDate[];
 }
 
+/**
+ * Retrieves simple usage data from the backend.
+ * @returns A list of simple usage data in the database
+ */
+export async function getBackupUsage(): Promise<BackupUsageInfo[]> {
+  return (await get(`get-all-usage`)) as BackupUsageInfo[];
+}
+
+/**
+ * Retrieves a list of detailed usage data from the backend.
+ * @returns A list of detailed usage data in the database.
+ */
 export async function getMainUsage() {
-  const token = localStorage.getItem("token");
-
-  const response = await fetch(`${apiUrl}/get-all-reports`, {
-    headers: {
-      authorization: `${token}`,
-    },
-    method: "GET",
-  });
-
-  const json = await response.json();
-
-  return json.data;
+  return (await get(`get-all-reports`)) as Object[];
 }
 
-export async function getUsageSummary() {
-  const token = localStorage.getItem("token");
-
-  const response = await fetch(`${apiUrl}/get-usage-summary`, {
-    headers: {
-      authorization: `${token}`,
-    },
-    method: "GET",
-  });
-
-  const json = await response.json();
-
-  return json.data;
+/**
+ * Retrieves a summary/report of the usage data.
+ * @returns A report as a list of objects.
+ */
+export async function getUsageSummary(): Promise<UsageSummary[]> {
+  return (await get(`get-usage-summary`)) as UsageSummary[];
 }

@@ -2,23 +2,12 @@ import { useEffect, useState } from "react";
 import TailwindDropdown from "../TailwindDropdown";
 import { getSubjects } from "../../api";
 import DownloadButton from "../DownloadButton";
+import Table from "../Table";
+import { Subject } from "../../ts/interfaces/api_interfaces";
 
 interface StudyDate {
   period_name: string;
   is_default: boolean;
-}
-
-interface Subject {
-  id: number;
-  subject_id: string;
-  email: string;
-  identified: boolean;
-  test_group: number;
-  treatment_intensity: number;
-  treatment_limit: number;
-  study_group: string;
-  date_inserted: string;
-  last_activity?: string;
 }
 
 function ViewSubjects() {
@@ -89,59 +78,25 @@ function ViewSubjects() {
       </div>
       <div>Finished survey: {filteredSubjects.length}</div>
       <div>
-        Installed app: {filteredSubjects.filter((s) => s.identified).length}
+        Installed app:{" "}
+        {filteredSubjects.filter((s) => s.identified === "True").length}
       </div>
       <div className="overflow-y-scroll h-5/6 my-8">
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th className="px-3 py-2 sticky top-0 bg-white">ID</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Subject ID</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Email</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Identified</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Test group</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Intensity</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Limit</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Group</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Join date</th>
-              <th className="px-3 py-2 sticky top-0 bg-white">Last activity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredSubjects.map((subject) => (
-              <tr key={subject.id}>
-                <td className="border px-3 py-2">{subject.id}</td>
-                <td className="border px-3 py-2">{subject.subject_id}</td>
-                <td className="border px-3 py-2">{subject.email}</td>
-                <td className="border px-3 py-2">
-                  {subject.identified ? (
-                    <span className="text-green-500">True</span>
-                  ) : (
-                    <span className="text-red-500">False</span>
-                  )}
-                </td>
-                <td className="border px-3 py-2">{subject.test_group}</td>
-                <td className="border px-3 py-2">
-                  {subject.treatment_intensity}
-                </td>
-                <td className="border px-3 py-2">{subject.treatment_limit}</td>
-                <td className="border px-3 py-2">{subject.study_group}</td>
-                <td className="border px-3 py-2">
-                  {subject.date_inserted
-                    .replace("T", " ")
-                    .slice(0, 16)
-                    .replace(/-/g, "/")}
-                </td>
-                <td className="border px-3 py-2">
-                  {subject.last_activity
-                    ?.replace("T", " ")
-                    .slice(0, 16)
-                    .replace(/-/g, "/")}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table
+          headers={[
+            "ID",
+            "Subject ID",
+            "Email",
+            "Identified",
+            "Test group",
+            "Intensity",
+            "Limit",
+            "Group",
+            "Join date",
+            "Last activity",
+          ]}
+          data={filteredSubjects.map((subject) => Object.values(subject))}
+        />
       </div>
     </div>
   );
