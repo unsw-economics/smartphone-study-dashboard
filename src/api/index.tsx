@@ -23,6 +23,7 @@ async function get(resource: string, params?: StrDict): Promise<Object> {
     authorization: `${token}`,
   };
 
+  // Format the query parameters string
   var queryParams = "";
   if (params) {
     queryParams += "?";
@@ -31,10 +32,12 @@ async function get(resource: string, params?: StrDict): Promise<Object> {
       .join("&");
   }
 
+  // Make the request
   const response = await fetch(`${apiUrl}/${resource}${queryParams}`, {
     headers,
     method: "GET",
   });
+
   const json = await response.json();
   return json.data;
 }
@@ -46,6 +49,8 @@ async function get(resource: string, params?: StrDict): Promise<Object> {
 export async function getSubjects(): Promise<Subject[]> {
   const subjects = (await get(`get-all-subjects`)) as Subject[];
   const datetimeRegex = /(\d+)-(\d+)-(\d+)T(\d+):(\d+).*/;
+
+  // Alter properties of subjects to be more readable
   subjects.forEach((subject: Subject) => {
     subject.identified = subject.identified ? "True" : "False";
     subject.date_inserted = subject.date_inserted.replace(
@@ -59,6 +64,7 @@ export async function getSubjects(): Promise<Subject[]> {
       );
     }
   });
+
   return subjects;
 }
 
@@ -75,7 +81,11 @@ export async function getDates(): Promise<StudyDate[]> {
  * @returns A list of simple usage data in the database
  */
 export async function getBackupUsage(): Promise<BackupUsageInfo[]> {
-  return (await get(`get-all-usage`)) as BackupUsageInfo[];
+  const usage = (await get(`get-all-usage`)) as BackupUsageInfo[];
+  usage.forEach(
+    (u: BackupUsageInfo) => (u.date_reported = u.date_reported.slice(0, 10))
+  );
+  return usage;
 }
 
 /**
@@ -91,5 +101,12 @@ export async function getMainUsage() {
  * @returns A report as a list of objects.
  */
 export async function getUsageSummary(): Promise<UsageSummary[]> {
-  return (await get(`get-usage-summary`)) as UsageSummary[];
+  const summary = (await get(`get-usage-summary`)) as UsageSummary[];
+  summary.forEach((s: UsageSummary) => {
+    s.latest_sign_in = s.latest_sign_in.replace(
+      /(\d+)-(\d+)-(\d+)T(\d+):(\d+).*/,
+      "$4:$5 $1/$2/$3"
+    );
+  });
+  return summary;
 }

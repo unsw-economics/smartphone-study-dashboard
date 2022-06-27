@@ -95,7 +95,7 @@ function ViewSubjects() {
             "Join date",
             "Last activity",
           ]}
-          data={filteredSubjects.map((subject) => Object.values(subject))}
+          data={filteredSubjects}
         />
       </div>
     </div>

@@ -1,8 +1,14 @@
 interface Props {
   headers: string[];
-  data: string[][];
+  data: Object[];
 }
 
+/**
+ * Render a simple table
+ * @param headers The headers for the table
+ * @param data A list of objects to display in the table
+ * @returns A JSX element of a table
+ */
 function Table({ headers, data }: Props): JSX.Element {
   const renderText = (text: string) => {
     switch (text) {
@@ -29,7 +35,7 @@ function Table({ headers, data }: Props): JSX.Element {
       <tbody>
         {data.map((row, indexR) => (
           <tr key={indexR}>
-            {row.map((cell, indexC) => (
+            {Object.values(row).map((cell, indexC) => (
               <td className="border px-2 py-1" key={indexR + indexC}>
                 {renderText(cell)}
               </td>

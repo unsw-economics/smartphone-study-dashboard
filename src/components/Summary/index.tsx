@@ -3,6 +3,7 @@ import { getUsageSummary } from "../../api";
 import { UsageSummary } from "../../ts/interfaces/api_interfaces";
 import { SimpleStudyDate } from "../../ts/interfaces/app_interfaces";
 import DownloadButton from "../DownloadButton";
+import Table from "../Table";
 import TailwindDropdown from "../TailwindDropdown";
 
 function Summary() {
@@ -73,44 +74,20 @@ function Summary() {
         for earlier data.
       </p>
       <div className="overflow-y-scroll h-5/6 my-8">
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Subject id</th>
-              <th className="px-4 py-2">Group</th>
-              <th className="px-4 py-2">Avg treatment usage</th>
-              <th className="px-4 py-2">Treatment days</th>
-              <th className="px-4 py-2">Days under limit</th>
-              <th className="px-4 py-2">Avg baseline usage</th>
-              <th className="px-4 py-2">Baseline days</th>
-              <th className="px-4 py-2">Latest sign in</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredSummary.map((subject: UsageSummary) => (
-              <tr key={subject.subject_id}>
-                <td className="border px-4 py-2">{subject.subject_id}</td>
-                <td className="border px-4 py-2">{subject.test_group}</td>
-                <td className="border px-4 py-2">
-                  {subject.avg_treatment_usage}
-                </td>
-                <td className="border px-4 py-2">
-                  {subject.treatment_report_days}
-                </td>
-                <td className="border px-4 py-2">{subject.days_under_limit}</td>
-                <td className="border px-4 py-2">
-                  {subject.avg_baseline_usage}
-                </td>
-                <td className="border px-4 py-2">
-                  {subject.baseline_report_days}
-                </td>
-                <td className="border px-4 py-2">
-                  {subject.latest_sign_in.replace("T", " ").substring(0, 16)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table
+          headers={[
+            "Subject ID",
+            "Group",
+            "Avg treatment usage",
+            "Treatment days",
+            "Days under limit",
+            "Avg baseline usage",
+            "Baseline days",
+            "Latest sign in",
+            "Study Group",
+          ]}
+          data={filteredSummary}
+        />
       </div>
     </div>
   );
