@@ -33,6 +33,7 @@ function Table({ headers, data }: Props): JSX.Element {
         </tr>
       </thead>
       <tbody>
+        {data.length == 0 && "Loading..."}
         {data.map((row, indexR) => (
           <tr key={indexR}>
             {Object.values(row).map((cell, indexC) => (

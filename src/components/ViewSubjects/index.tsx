@@ -25,6 +25,7 @@ function ViewSubjects() {
     (async () => {
       // Retrieve the list of subjects from the backend using the selected study date
       if (selected) {
+        setSubjects([]);
         setSubjects(await getSubjects(selected));
       }
     })();

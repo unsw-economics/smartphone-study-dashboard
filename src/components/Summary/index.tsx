@@ -6,9 +6,7 @@ import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 
 function Summary() {
-  const [summary, setSummary] = useState<UsageSummary[] | string[][]>([
-    ["Loading..."],
-  ]);
+  const [summary, setSummary] = useState<UsageSummary[]>([]);
   const [groups, setGroups] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -27,6 +25,7 @@ function Summary() {
     (async () => {
       // Retrieve the usage report from the backend using the selected study date
       if (selected) {
+        setSummary([]);
         setSummary(await getUsageSummary(selected));
       }
     })();
@@ -43,7 +42,7 @@ function Summary() {
         Please let the research assistant know if you need to use this feature
         for earlier data.
       </p>
-      <div className="overflow-y-scroll h-5/6 my-8">
+      <div className="overflow-y-scroll h-1/2 my-8">
         <Table
           headers={[
             "Subject ID",
@@ -59,6 +58,7 @@ function Summary() {
           data={summary}
         />
       </div>
+      <h6 className="font-semibold">... or download weekly reports:</h6>
     </div>
   );
 }

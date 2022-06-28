@@ -86,8 +86,16 @@ export async function getDates(): Promise<StudyDate[]> {
  * Retrieves simple usage data from the backend.
  * @returns A list of simple usage data in the database
  */
-export async function getBackupUsage(): Promise<BackupUsageInfo[]> {
-  const usage = (await get(`get-all-usage`)) as BackupUsageInfo[];
+export async function getBackupUsage(
+  group?: string
+): Promise<BackupUsageInfo[]> {
+  var usage;
+  if (group) {
+    usage = (await get("get-all-usage", { group })) as BackupUsageInfo[];
+  } else {
+    usage = (await get("get-all-usage")) as BackupUsageInfo[];
+  }
+
   usage.forEach(
     (u: BackupUsageInfo) => (u.date_reported = u.date_reported.slice(0, 10))
   );

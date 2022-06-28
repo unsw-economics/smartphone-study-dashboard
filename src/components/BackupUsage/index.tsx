@@ -1,18 +1,32 @@
 import { useState, useEffect } from "react";
-import { getBackupUsage } from "../../api";
+import { getBackupUsage, getDates } from "../../api";
+import SelectStudyGroups from "../../SelectStudyGroups";
 import { BackupUsageInfo } from "../../ts/interfaces/api_interfaces";
 import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 
 function BackupUsage() {
   const [usage, setUsage] = useState<BackupUsageInfo[]>([]);
+  const [groups, setGroups] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
-      const _usage = await getBackupUsage();
-      setUsage(_usage);
+      // Retrieve possible study dates from the backend
+      const dates = await getDates();
+      setSelected(dates.filter((d) => d.is_default)[0].period_name);
+      setGroups(dates.map((d) => d.period_name));
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (selected) {
+        setUsage([]);
+        setUsage(await getBackupUsage(selected));
+      }
+    })();
+  }, [selected]);
 
   return (
     <div className="w-full">
@@ -43,7 +57,10 @@ function BackupUsage() {
         accurate data.
       </p>
 
-      <DownloadButton objects={usage} filename={`usage_report`} />
+      <div className="flex flex-row-reverse gap-2">
+        <DownloadButton objects={usage} filename={`usage_report_${selected}`} />
+        <SelectStudyGroups {...{ groups, selected, setSelected }} />
+      </div>
       <div className="overflow-y-scroll h-1/2 my-8">
         <Table
           headers={[
