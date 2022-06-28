@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { getDates, getUsageSummary } from "../../api";
+import SelectStudyGroups from "../../SelectStudyGroups";
 import { UsageSummary } from "../../ts/interfaces/api_interfaces";
 import DownloadButton from "../DownloadButton";
 import Table from "../Table";
-import TailwindDropdown from "../TailwindDropdown";
 
 function Summary() {
-  const [usageSummary, setUsageSummary] = useState<UsageSummary[]>([]);
+  const [summary, setSummary] = useState<UsageSummary[]>([]);
   const [groups, setGroups] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -25,7 +25,7 @@ function Summary() {
     (async () => {
       // Retrieve the usage report from the backend using the selected study date
       if (selected) {
-        setUsageSummary(await getUsageSummary(selected));
+        setSummary(await getUsageSummary(selected));
       }
     })();
   }, [selected]);
@@ -33,18 +33,8 @@ function Summary() {
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
-        <DownloadButton
-          objects={usageSummary}
-          filename={`Summary_${selected}_${new Date().toLocaleDateString()}`}
-        />
-        <div className="flex gap-2">
-          <div className="self-center text-md">Select study group:</div>
-          <TailwindDropdown
-            options={groups}
-            selected={selected || "Loading..."}
-            setSelected={setSelected}
-          />
-        </div>
+        <DownloadButton objects={summary} filename={`Summary_${selected}}`} />
+        <SelectStudyGroups {...{ groups, selected, setSelected }} />
       </div>
       <p>
         Note that this feature will only work for the data from 22T2 onwards.
@@ -64,7 +54,7 @@ function Summary() {
             "Latest sign in",
             "Study Group",
           ]}
-          data={usageSummary}
+          data={summary}
         />
       </div>
     </div>

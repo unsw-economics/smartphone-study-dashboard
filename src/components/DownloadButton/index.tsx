@@ -7,7 +7,8 @@ interface Props {
 
 function DownloadButton({ objects, filename }: Props) {
   function handleDownload() {
-    downloadCSV(arrayOfObjectsToCSV(objects), `${filename}.csv`);
+    const date = new Date().toLocaleDateString();
+    downloadCSV(arrayOfObjectsToCSV(objects), `${filename}_${date}.csv`);
   }
 
   return (

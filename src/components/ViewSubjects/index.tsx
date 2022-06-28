@@ -3,7 +3,7 @@ import { getDates, getSubjects } from "../../api";
 import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 import { Subject } from "../../ts/interfaces/api_interfaces";
-import TailwindDropdown from "../TailwindDropdown";
+import SelectStudyGroups from "../../SelectStudyGroups";
 
 function ViewSubjects() {
   const [groups, setGroups] = useState<string[]>([]);
@@ -33,23 +33,12 @@ function ViewSubjects() {
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
-        <DownloadButton
-          objects={subjects}
-          filename={`Subjects_${selected}_${new Date().toLocaleDateString()}`}
-        />
-        <div className="flex gap-2">
-          <div className="self-center text-md">Select study group:</div>
-          <TailwindDropdown
-            options={groups}
-            selected={selected || "Loading..."}
-            setSelected={setSelected}
-          />
-        </div>
+        <DownloadButton objects={subjects} filename={`Subjects_${selected}`} />
+        <SelectStudyGroups {...{ groups, selected, setSelected }} />
       </div>
       <div>Finished survey: {subjects.length}</div>
       <div>
-        Installed app:
-        {subjects.filter((s) => s.identified === "True").length}
+        Installed app: {subjects.filter((s) => s.identified === "True").length}
       </div>
       <div className="overflow-y-scroll h-5/6 my-8">
         <Table

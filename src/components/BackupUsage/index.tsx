@@ -17,10 +17,7 @@ function BackupUsage() {
   return (
     <div className="w-full">
       <h1 className="text-2xl text-bold font-bold mb-2">Usage Reports</h1>
-      <DownloadButton
-        objects={usage}
-        filename={`usage_report_at_${new Date().toLocaleDateString()}`}
-      />
+      <DownloadButton objects={usage} filename={`usage_report`} />
       <div className="overflow-y-scroll h-5/6 my-8">
         <Table
           headers={[
