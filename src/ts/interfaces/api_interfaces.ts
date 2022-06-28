@@ -35,10 +35,12 @@ interface UsageSummary {
 interface BackupUsageInfo {
   subject_id: string;
   study_group: string;
-  date_reported: string;
-  usage: number;
   period: string;
   day: number;
+  date_reported: string;
+  simple_usage: number;
+  detailed_usage: number;
+  usage: number;
 }
 
 export type { Subject, StudyDate, UsageSummary, BackupUsageInfo };
