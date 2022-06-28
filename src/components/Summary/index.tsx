@@ -6,7 +6,9 @@ import DownloadButton from "../DownloadButton";
 import Table from "../Table";
 
 function Summary() {
-  const [summary, setSummary] = useState<UsageSummary[]>([]);
+  const [summary, setSummary] = useState<UsageSummary[] | string[][]>([
+    ["Loading..."],
+  ]);
   const [groups, setGroups] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -33,7 +35,7 @@ function Summary() {
   return (
     <div className="border-2 w-full border-transparent">
       <div className="flex flex-row-reverse gap-2">
-        <DownloadButton objects={summary} filename={`Summary_${selected}}`} />
+        <DownloadButton objects={summary} filename={`Summary_${selected}`} />
         <SelectStudyGroups {...{ groups, selected, setSelected }} />
       </div>
       <p>
