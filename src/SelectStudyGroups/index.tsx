@@ -3,7 +3,7 @@ import TailwindDropdown from "../components/TailwindDropdown";
 interface Props {
   groups: string[];
   selected: string | null;
-  setSelected: (selected: string | null) => void;
+  setSelected: (selected: string) => void;
 }
 
 function SelectStudyGroups({ groups, selected, setSelected }: Props) {

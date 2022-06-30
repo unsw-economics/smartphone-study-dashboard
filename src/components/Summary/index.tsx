@@ -8,8 +8,8 @@ import WeeklyReports from "../WeeklyReports";
 
 function Summary() {
   const [summary, setSummary] = useState<UsageSummary[]>([]);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [start_date, setStartDate] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
   const [dates, setDates] = useState<StudyDate[]>([]);
 
   // Triggers on page load
@@ -62,8 +62,8 @@ function Summary() {
           data={summary}
         />
       </div>
-      <h6 className="font-semibold">... or download weekly reports:</h6>
-      <WeeklyReports group={selected} treatment_start_date={start_date} />
+      <h6 className="font-semibold">... or download weekly reports for:</h6>
+      <WeeklyReports group={selected} startDate={startDate} />
     </div>
   );
 }

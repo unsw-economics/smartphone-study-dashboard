@@ -2,30 +2,22 @@ import { getUsageSummary } from "../../api";
 import { arrayOfObjectsToCSV, downloadCSV } from "../../util";
 
 interface Props {
-  group: string | null;
-  treatment_start_date: string | null;
+  group: string;
+  startDate: string;
 }
 
-function WeeklyReports({ group, treatment_start_date }: Props) {
-  if (!group || !treatment_start_date) {
+function WeeklyReports({ group, startDate }: Props) {
+  if (!group || !startDate) {
     return <div>Loading...</div>;
   }
 
   // Convert treatment_start_date to a Date object
-  const today = new Date();
-  const start_date = new Date(treatment_start_date);
-  const offsets = [0, 7, 14, 21];
-  const offset_dates = offsets.map((start) => {
-    const date = new Date(start_date);
-    date.setDate(date.getDate() + start);
-    const end_date = new Date(date);
-    end_date.setDate(end_date.getDate() + 6);
-    return [date, end_date];
-  });
-
-  // Format dates
-  const formatted_dates = offset_dates.map(([start, end]) => {
-    return [start.toISOString().slice(0, 10), end.toISOString().slice(0, 10)];
+  const dates = [0, 7, 14, 21].map((start) => {
+    const first = new Date(startDate);
+    first.setDate(first.getDate() + start);
+    const last = new Date(first);
+    last.setDate(last.getDate() + 6);
+    return [first.toISOString().slice(0, 10), last.toISOString().slice(0, 10)];
   });
 
   // Download CSV file
@@ -37,16 +29,14 @@ function WeeklyReports({ group, treatment_start_date }: Props) {
 
   return (
     <div>
-      {Array.from({ length: 4 }, (_, i) => i).map((i) => (
+      {[0, 1, 2, 3].map((i) => (
         <div className="mb-2">
-          Week {i + 1}
+          Week {i + 1} ({dates[i][0]} to {dates[i][1]})
           <button
-            type="button"
             className="ml-6 px-4 py-2 rounded focus:outline-none disabled:opacity bg-gray-300 disabled:text-gray-500"
-            disabled={today < offset_dates[i][1]}
-            onClick={() =>
-              handleDownload(formatted_dates[i][0], formatted_dates[i][1])
-            }
+            type="button"
+            onClick={() => handleDownload(dates[i][0], dates[i][1])}
+            disabled={new Date().toISOString() < dates[i][1]}
           >
             Download
           </button>
