@@ -114,9 +114,19 @@ export async function getMainUsage() {
  * Retrieves a summary/report of the usage data.
  * @returns A report as a list of objects.
  */
-export async function getUsageSummary(group?: string): Promise<UsageSummary[]> {
+export async function getUsageSummary(
+  group?: string,
+  start_date?: string,
+  end_date?: string
+): Promise<UsageSummary[]> {
   var summary;
-  if (group) {
+  if (group && start_date && end_date) {
+    summary = (await get("get-usage-summary", {
+      group,
+      start_date,
+      end_date,
+    })) as UsageSummary[];
+  } else if (group) {
     summary = (await get("get-usage-summary", { group })) as UsageSummary[];
   } else {
     summary = (await get("get-usage-summary")) as UsageSummary[];
