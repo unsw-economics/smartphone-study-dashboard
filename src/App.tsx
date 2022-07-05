@@ -8,6 +8,7 @@ import TreatmentInfo from "./components/TreatmentInfo";
 import BackupUsage from "./components/BackupUsage";
 import MainUsage from "./components/MainUsage";
 import UsageSummary from "./components/Summary";
+import SurveyVarCoding from "./components/SurveyVarCoding";
 
 function App() {
   const [selectedButton, setSelectedButton] = useState("");
@@ -43,6 +44,9 @@ function App() {
       break;
     case "genUsage":
       content = <UsageSummary />;
+      break;
+    case "surveyVarCoding":
+      content = <SurveyVarCoding />;
       break;
     default:
       content = <NoContent />;

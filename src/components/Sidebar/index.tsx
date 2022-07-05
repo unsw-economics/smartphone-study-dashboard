@@ -17,6 +17,7 @@ function Sidebar({ selectedButton, setSelectedButton }: Props) {
     usageReportsBackup: "View usage reports",
     usageReportsMain: "View usage reports (old)",
     genUsage: "Generate usage summary",
+    surveyVarCoding: "Survey variable coding",
   };
 
   return (
