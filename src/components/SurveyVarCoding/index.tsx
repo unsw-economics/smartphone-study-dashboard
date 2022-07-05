@@ -91,6 +91,11 @@ function SurveyVarCoding() {
   const theme = useMantineTheme();
   return (
     <div className="w-full">
+      <p>
+        The required Qualtrics file can be found by going to Data &amp; Analysis
+        &gt; Export &amp; Import &gt; CSV &gt; Select 'Download all fields' and
+        'Use numeric values' &gt; Download
+      </p>
       <Dropzone
         onDrop={handleOnDrop}
         onReject={handleOnReject}
